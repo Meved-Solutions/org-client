@@ -12,7 +12,7 @@ import Home from "./pages/Home";
 
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   return(
     <Router>

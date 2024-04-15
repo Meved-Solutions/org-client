@@ -11,7 +11,7 @@ const Sidebar = () => {
 
   const navItems = [
     { name: 'Home', icon: IoHomeOutline, path: '/' },
-    { name: 'Applications', icon: IoAppsOutline, path: '/postings' },
+    { name: 'Postings', icon: IoAppsOutline, path: '/postings' },
     { name: 'Messages', icon: IoMailOutline, path: '/messages' },
     { name: 'Profile', icon: IoPersonOutline, path: '/profile' },
     { name: 'LogOut', icon: IoLogOutOutline , path : '/logout' },
@@ -28,7 +28,7 @@ const Sidebar = () => {
   return (
     <div className='shadow-lg h-screen bg-white'>
      <div className='flex flex-row justify-center pt-3  font-bold'>
-        Organization
+        MVORG
       </div>
       <div className="pt-6 px-4">
         {navItems.map((item) => {
