@@ -3,11 +3,16 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import { Authenticated, Org } from "@/atom";
 
 
 const Onboarding = () => {
 
   const navigate = useNavigate();
+  const setAuthenticated = useSetRecoilState(Authenticated);
+  const setOrg = useSetRecoilState(Org);
 
   const [orgName , setOrgName ] = useState('');
   const [locationName, setLocationName] = useState('');
@@ -17,6 +22,9 @@ const Onboarding = () => {
   const [orgUniqueNess , setOrgUniqueNess ] = useState('');
   const [orgLogo, setOrgLogo] = useState<File | null>(null);
   const [ orgEmail , setOrgEmail] = useState('');
+  const [phone,setPhone] = useState('');
+  const [website,setWebsite] = useState('');
+  const [otherLinks,setOtherLinks] = useState('');  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +35,7 @@ const Onboarding = () => {
   }
 
 
-  const onSubmit = (event: React.FormEvent) => {
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
@@ -36,19 +44,35 @@ const Onboarding = () => {
     }
   
     const orgData = {
-      orgName,
-      locationName,
-      locationState,
-      locationCountry,
-      orgDescription,
-      orgUniqueNess,
-      orgLogo,
-      orgEmail,
+      name : orgName,
+      location: {
+        name : locationName,
+        state : locationState,
+        country : locationCountry
+      },
+      description : orgDescription,
+      reasonForJoining : orgUniqueNess,
+      logo : orgLogo,
+      email : orgEmail,
       password,
+      phone,
+      website,
+      otherLinks,
     };
+
+    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/org/createOrganization`,orgData,{
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   
-    console.log(orgData);
-  
+    console.log(res.data);
+    localStorage.setItem("token" ,res.data.token );
+    localStorage.setItem("_id" ,res.data.organization._id );
+    setAuthenticated(true);
+    setOrg(res.data.organization);
+    navigate('/');
+    window.location.reload();
   };
 
   return (
@@ -117,7 +141,25 @@ const Onboarding = () => {
                   <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                     Contact Email
                   </h4>
-                  <Input type="text" value={orgEmail} onChange={(e)=>{setOrgEmail(e.target.value)}} placeholder="Enter Your Org Name" className="mt-2"/>
+                  <Input type="text" value={orgEmail} onChange={(e)=>{setOrgEmail(e.target.value)}} placeholder="Enter Your Org Email" className="mt-2"/>
+              </div>
+              <div className="px-8 mt-4">
+                  <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                    Phone Number
+                  </h4>
+                  <Input type="text" value={phone} onChange={(e)=>{setPhone(e.target.value)}} placeholder="Enter Your Org Phone Number" className="mt-2"/>
+              </div>
+              <div className="px-8 mt-4">
+                  <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                    Website
+                  </h4>
+                  <Input type="text" value={website} onChange={(e)=>{setWebsite(e.target.value)}} placeholder="Enter Your Org Website" className="mt-2"/>
+              </div>
+              <div className="px-8 mt-4">
+                  <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                    Other Links (If Any)
+                  </h4>
+                  <Input type="text" value={otherLinks} onChange={(e)=>{setOtherLinks(e.target.value)}} placeholder="Other Links" className="mt-2"/>
               </div>
               <div className="px-8 mt-4">
                 <h4 className="scroll-m-20 text-sm font-medium tracking-tight">

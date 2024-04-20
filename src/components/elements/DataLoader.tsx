@@ -1,31 +1,32 @@
-import { Authenticated  } from "@/atom";
+import { Authenticated, Org  } from "@/atom";
 import axios from "axios"
 import { useEffect, useRef } from "react"
-import { useSetRecoilState } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 
 const DataLoader = () => {
   const dataLoaded = useRef(false);
-//   const setUserData = useSetRecoilState(User);
+  const setOrg = useSetRecoilState(Org);
   const setAuthenticated = useSetRecoilState(Authenticated)
 
 
   const loadUserData = async() => {
-    // const _id = localStorage.getItem("_id");
+    const _id = localStorage.getItem("_id");
 
-    // if (_id) {
-    //   try {
-    //     const user = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/getUser/${_id}` , {
-    //       headers: {
-    //         'Authorization': localStorage.getItem("token"),
-    //       },
-    //       withCredentials: true
-    //     });
-    //     console.log(user.data);
-    //     setUserData(user.data)
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+    if (_id) {
+      try {
+        const user = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/org/getOrganization/${_id}` , {
+          headers: {
+            'Authorization': localStorage.getItem("token"),
+          },
+          withCredentials: true
+        });
+        console.log(user.data);
+        setOrg(user.data)
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   useEffect(()=>{  

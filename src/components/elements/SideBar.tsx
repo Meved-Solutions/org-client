@@ -34,18 +34,18 @@ const Sidebar = () => {
         {navItems.map((item) => {
           const IconComponent = item.icon;
           return (
-            item.name !== 'Logout' ? (
-              <Link key={item.name} to={item.path} className="flex flex-col items-center my-6 text-sm font-semibold text-gray-500 hover:text-gray-700">
-                <a><IconComponent className="my-1" size={26}/></a>
-                <h2>{item.name}</h2>
-              </Link>
-            ) : (
-              <div key={item.name} className="flex flex-col items-center my-6 text-sm font-semibold text-gray-500 hover:text-gray-700" onClick={handleLogout}>
-                <a><IconComponent className="my-1" size={26}/></a>
-                <h2>{item.name}</h2>
-              </div>
-            )
-          );
+              item.name !== 'LogOut' ? (
+                <Link key={item.name} to={item.path} className="flex flex-col items-center my-6 text-sm font-semibold text-gray-500 hover:text-gray-700">
+                  <IconComponent className="my-1" size={26}/>
+                  <h2>{item.name}</h2>
+                </Link>
+              ) : (
+                <div key={item.name} className="flex flex-col items-center my-6 text-sm font-semibold text-gray-500 hover:text-gray-700" onClick={handleLogout}>
+                  <IconComponent className="my-1" size={26}/>
+                  <h2>{item.name}</h2>
+                </div>
+              )
+            );
         })}
       </div>
     </div>

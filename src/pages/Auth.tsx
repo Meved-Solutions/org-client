@@ -1,15 +1,18 @@
+import { Authenticated, Org } from "@/atom";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 
 
 const Auth = () => {
 
   const navigate = useNavigate();
-
-  const [orgId, setOrgId] = useState('');
+  const setAuthenticated = useSetRecoilState(Authenticated);
+  const setOrg = useSetRecoilState(Org);
   const [orgEmail, setOrgEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,10 +21,20 @@ const Auth = () => {
     navigate('/onboarding');
   } 
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle form submission here
-    console.log({ orgId, orgEmail, password });
+    const data = {
+      email : orgEmail,
+      password,
+    }
+    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/org/login`,data)
+    console.log(res.data);
+    localStorage.setItem("token" ,res.data.token );
+    localStorage.setItem("_id" ,res.data.organization._id );
+    setAuthenticated(true);
+    setOrg(res.data.organization);
+    navigate('/');
+    window.location.reload()
   }
 
   return (
@@ -35,17 +48,11 @@ const Auth = () => {
                   Meved Org Login
                 </h1>
               </div>
-              <div className="px-8">
-                <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
-                  Org Id
-                </h4>
-                <Input type="text" value={orgId} onChange={(e) => { setOrgId(e.target.value) }} placeholder="Enter Your Org ID" className="mt-2" />
-              </div>
               <div className="px-8 mt-4">
                 <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                   Org Contact Email
                 </h4>
-                <Input type="text" value={orgEmail} onChange={(e) => { setOrgEmail(e.target.value) }} placeholder="Enter Your Org ID" className="mt-2" />
+                <Input type="text" value={orgEmail} onChange={(e) => { setOrgEmail(e.target.value) }} placeholder="Enter Your Org Email" className="mt-2" />
               </div>
               <div className="px-8 mt-4">
                 <h4 className="scroll-m-20 text-sm font-medium tracking-tight">

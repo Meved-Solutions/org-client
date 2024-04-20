@@ -7,3 +7,7 @@ export const Authenticated = atom({
 }); 
 
 
+export const Org = atom({
+    key : "Org",
+    default : {}
+})
