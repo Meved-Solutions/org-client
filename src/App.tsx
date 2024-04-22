@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import { useRecoilValue } from "recoil";
 import { Authenticated } from "./atom";
+import Posting from "./pages/Posting";
 
 const MainRoutes = () => {
   const isAuthenticated = useRecoilValue(Authenticated);
@@ -38,6 +39,7 @@ const MainRoutes = () => {
             <Route path='/' element={<Home/>}/>
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/postings' element={<Postings/>}/>
+            <Route path='/posting/:id' element={<Posting/>}/>
             <Route path='/messages' element={<Messages/>}/>
           </Routes>
         </div>
