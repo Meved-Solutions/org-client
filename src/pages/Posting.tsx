@@ -21,6 +21,14 @@ import {
     SheetTitle,
     SheetTrigger,
   } from "@/components/ui/sheet"
+
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
   
 
@@ -30,6 +38,7 @@ const Posting = () => {
   const parts = location.pathname.split("/");
   const _id = parts[parts.length - 1];
   const [posting, setPosting] = useState({
+    postingStatus : false,
     title: "",
     job_description: "",
     minExperience: "",
@@ -54,6 +63,40 @@ const Posting = () => {
     org_id: null,
     org_name: "",
   });
+  const [postingStatus, setPostingStatus] = useState(false);
+  const [jobDescription, setJobDescription] = useState("");
+  const [evaluationQuestions, setEvaluationQuestions] = useState<string[]>([]);
+  
+  const handleEvaluationQuestionChange = (index: number, newQuestion: string) => {
+    const newEvaluationQuestions = [...evaluationQuestions];
+    newEvaluationQuestions[index] = newQuestion;
+    setEvaluationQuestions(newEvaluationQuestions);
+  };
+  
+  const handleAddEvaluationQuestion = () => {
+    setEvaluationQuestions([...evaluationQuestions, ""]);
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+        postingStatus : postingStatus,
+        newEvaluationQuestions : evaluationQuestions,
+        job_description : jobDescription
+    }
+
+    const res = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/posting/updatePosting/${_id}`, data,{
+        headers: {
+            'Authorization': localStorage.getItem("token"),
+          }
+    });
+
+    console.log(res.data);
+    
+    
+  }
 
   useEffect(()=>{
     const fetchPosting = async () => {
@@ -103,13 +146,67 @@ const Posting = () => {
                     <div>
                     <Sheet>
                         <SheetTrigger><FaPencilAlt/></SheetTrigger>
-                        <SheetContent>
+                        <SheetContent className="oveflow-auto">
                             <SheetHeader>
                             <SheetTitle>
                             <h1 className="scroll-m-20 text-2xl font-bold tracking-tight">
                             Edit Posting
                             </h1></SheetTitle>
-                            
+                            <div className="mt-6">
+                                <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                                Posting Status
+                                </h4>
+                                <Select onValueChange={(value) => setPostingStatus(value == "true" ? true : false)}>
+                                <SelectTrigger className="w-full mt-2">
+                                    <SelectValue placeholder={posting.postingStatus ? "Showing" : "Hidden"} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="true">Showing</SelectItem>
+                                    <SelectItem value="false">Hidden</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="mt-6">
+                                <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                                Job Description
+                                </h4>
+                                <textarea 
+                                value={posting.job_description} 
+                                onChange={(e) =>  {setPosting({...posting, job_description: e.target.value}) ; setJobDescription(e.target.value)}} 
+                                className="text-xs h-20 px-1 py-1 mt-2 w-full rounded-sm shadow-sm ring-1 ring-gray-200"
+                                />
+                            </div>
+                            <div className="mt-6">
+                                <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                                Evaluation Questions
+                                </h4>
+                                {posting.evaluation.map((evalu, index) => (
+                                <Input 
+                                    key={index} 
+                                    type="text" 
+                                    value={evalu.question} 
+                                    onChange={(e) => {
+                                    const newEvaluation = [...evaluation];
+                                    newEvaluation[index].question = e.target.value;
+                                    setEvaluation(newEvaluation);
+                                    }} 
+                                    className="mt-2 w-full"
+                                />
+                                ))}
+                                {evaluationQuestions.map((question, index) => (
+                                <Input 
+                                    key={index} 
+                                    type="text" 
+                                    value={question} 
+                                    onChange={(e) => handleEvaluationQuestionChange(index, e.target.value)} 
+                                    className="mt-2 w-full"
+                                />
+                                ))}
+                                <Button onClick={handleAddEvaluationQuestion}>Add Evaluation Question</Button>  
+                            </div>
+                            <Button onClick={handleSubmit}>
+                                Submit
+                            </Button>
                             </SheetHeader>
                         </SheetContent>
                         </Sheet>
@@ -131,6 +228,12 @@ const Posting = () => {
                 </div>
                 <div className="mt-6">
                     <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
+                    Posting Status
+                    </h4>
+                    <Input disabled type="text" value={posting.postingStatus ? "Showing" : "Hidden"} className="mt-2 w-full"/>
+                </div>
+                <div className="mt-6">
+                    <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                     Title
                     </h4>
                     <Input disabled type="text" value={posting.title} className="mt-2 w-full"/>
@@ -139,7 +242,7 @@ const Posting = () => {
                     <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                     Job Description
                     </h4>
-                    <Input disabled type="text" value={posting.job_description} className="mt-2 w-full"/>
+                    <textarea disabled  value={posting.job_description} className="mt-2 w-full"/>
                 </div>
                 <div className="mt-6">
                     <h4 className="scroll-m-20 text-sm font-medium tracking-tight">

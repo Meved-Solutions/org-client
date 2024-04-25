@@ -80,6 +80,13 @@ const Postings = () => {
     org_id: localStorage.getItem("_id"),
     org_name : org.name ,
   });
+
+  const [filter , setFilter] = useState({
+    jobType : "",
+    domain : ""
+  })
+
+
   const [skillInput, setSkillInput] = useState("");
   
   const addLocation = () => {
@@ -159,6 +166,11 @@ const Postings = () => {
         })
         
       };
+
+      const filteredPostings = postings.filter(posting => 
+        (filter.jobType === "" ? posting : posting.job_type === filter.jobType) &&
+        (filter.domain === "" ? posting : posting.domain === filter.domain) 
+      );
       
 
       return (
@@ -176,14 +188,42 @@ const Postings = () => {
                     Filer Postings
                   </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="h-[70vh] overflow-auto">
                     <DialogHeader>
-                      <DialogTitle>Are you absolutely sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                      </DialogDescription>
+                      <DialogTitle>Filter Postings</DialogTitle>
                     </DialogHeader>
+                    <div className="mt-6">
+                        <h4 className="scroll-m-20 my-2 font-semibold tracking-tight">
+                            Job Type
+                        </h4>
+                        <Select onValueChange={(value)=>{setFilter({...filter, jobType:value})}}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Job type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Full-Time">Full-Time</SelectItem>
+                            <SelectItem value="Part-Time">Part-Time</SelectItem>
+                            <SelectItem value="Internship">Internship</SelectItem>
+                            <SelectItem value="Contractual">Contractual</SelectItem>
+                          </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="mt-6">
+                        <h4 className="scroll-m-20 my-2 font-semibold tracking-tight">
+                            Domain
+                        </h4>
+                        <Select onValueChange={(value)=>{setFilter({...filter, domain:value})}}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Job type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Software">Software</SelectItem>
+                            <SelectItem value="Marketing">Marketing</SelectItem>
+                            <SelectItem value="Management">Management</SelectItem>
+                            <SelectItem value="Consultancy">Consultancy</SelectItem>
+                          </SelectContent>
+                        </Select>
+                    </div>
                   </DialogContent>
                 </Dialog>
               <Drawer>
@@ -399,7 +439,7 @@ const Postings = () => {
             </div>
           </div>
           <div className="mt-6 mx-8 grid grid-cols-3 gap-6 overflow-y-auto" style={{ maxHeight: '400px' }}>
-          {postings.map((posting, index) => (
+          {filteredPostings.map((posting, index) => (
               <div key={index}>
                 <PostingsCard
                 _id = {posting._id}
