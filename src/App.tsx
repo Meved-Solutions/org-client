@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import { useRecoilValue } from "recoil";
 import { Authenticated } from "./atom";
 import Posting from "./pages/Posting";
+import ApplicantProfile from "./pages/ApplicantProfile";
 
 const MainRoutes = () => {
   const isAuthenticated = useRecoilValue(Authenticated);
@@ -23,7 +24,7 @@ const MainRoutes = () => {
       }
     } else {
       if (location.pathname === "/") {
-        navigate('/');
+        navigate('/postings');
       }
     }
   }, [navigate, location, isAuthenticated]);
@@ -40,6 +41,7 @@ const MainRoutes = () => {
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/postings' element={<Postings/>}/>
             <Route path='/posting/:id' element={<Posting/>}/>
+            <Route path='posting/:id/applicant/:uid' element={<ApplicantProfile/>}/>
             <Route path='/messages' element={<Messages/>}/>
           </Routes>
         </div>

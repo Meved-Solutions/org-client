@@ -10,9 +10,7 @@ const Sidebar = () => {
   const setAuthenticated = useSetRecoilState(Authenticated);
 
   const navItems = [
-    { name: 'Home', icon: IoHomeOutline, path: '/' },
     { name: 'Postings', icon: IoAppsOutline, path: '/postings' },
-    { name: 'Messages', icon: IoMailOutline, path: '/messages' },
     { name: 'Profile', icon: IoPersonOutline, path: '/profile' },
     { name: 'LogOut', icon: IoLogOutOutline , path : '/logout' },
   ];

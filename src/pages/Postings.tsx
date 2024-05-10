@@ -438,7 +438,7 @@ const Postings = () => {
               </Drawer>
             </div>
           </div>
-          <div className="mt-6 mx-8 grid grid-cols-3 gap-6 overflow-y-auto" style={{ maxHeight: '400px' }}>
+          <div className="mt-6  grid grid-cols-3 gap-4 overflow-y-auto" style={{ maxHeight: '400px' }}>
           {filteredPostings.map((posting, index) => (
               <div key={index}>
                 <PostingsCard

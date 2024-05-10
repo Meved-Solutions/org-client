@@ -30,6 +30,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
+import ApplicantCard from "@/components/elements/ApplicantCard";
   
 
 const Posting = () => {
@@ -66,6 +67,7 @@ const Posting = () => {
   const [postingStatus, setPostingStatus] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
   const [evaluationQuestions, setEvaluationQuestions] = useState<string[]>([]);
+  const [applications,setApplications] = useState([]);
   
   const handleEvaluationQuestionChange = (index: number, newQuestion: string) => {
     const newEvaluationQuestions = [...evaluationQuestions];
@@ -100,16 +102,30 @@ const Posting = () => {
 
   useEffect(()=>{
     const fetchPosting = async () => {
-        const res = await axios(`${import.meta.env.VITE_BACKEND_URL}/api/posting/getPosting/${_id}`,{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/posting/getPosting/${_id}`,{
             headers: {
                 'Authorization': localStorage.getItem("token"),
-              }
+              },
+              withCredentials : true
         })
         console.log(res.data);
         setPosting(res.data)
     }
 
+    const fectchApplications = async () =>{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/application/getApplicationsByPosting/${_id}`,{
+        headers: {
+            'Authorization': localStorage.getItem("token"),
+            },
+            withCredentials : true
+        })
+
+        console.log(res.data);
+        setApplications(res.data)
+    }
+
     fetchPosting()
+    fectchApplications()
   },[_id])
 
   const handleDelete = async(e) => {
@@ -317,7 +333,11 @@ const Posting = () => {
                 </div>
                 </TabsContent>
                 <TabsContent value="Applications">
-                     Applications
+                     <div className="mt-6 mx-8 grid grid-cols-3 gap-6 overflow-y-auto" style={{ maxHeight: '400px' }}>
+                        {applications.map((application,index)=>(
+                          <ApplicantCard key={index} application={application}/>
+                        ))}
+                     </div>
                 </TabsContent>
             </Tabs>
         </div>
