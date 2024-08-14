@@ -1,9 +1,7 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
 
 const Messages = () => {
 
-  const navigate = useNavigate();
 
   const [chatOpend, setChatOpened ] = useState(false);
   const [chatID , setChatId] = useState("");

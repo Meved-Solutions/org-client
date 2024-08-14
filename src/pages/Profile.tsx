@@ -18,10 +18,42 @@ import { Org } from "@/atom";
 import axios from "axios";
 
 
-const Profile = () => {
+interface Org {
+  logo: string;
+  website: string;
+  otherLinks: string;
+  description: string;
+  reasonForJoining: string;
+  approvedByAdmin: string;
+  name: string;
+  email: string;
+  phone: string;
+  location: {
+    name: string;
+    state: string;
+    country: string;
+  };
+}
+
+const Profile: React.FC = () => {
   
   const forg = useRecoilValue(Org)  
-  const [org,setOrg] = useState({})
+  const [org, setOrg] = useState<Org>({
+    logo: '',
+    website: '',
+    otherLinks: '',
+    description: '',
+    reasonForJoining: '',
+    approvedByAdmin: '',
+    name: '',
+    email: '',
+    phone: '',
+    location: {
+      name: '',
+      state: '',
+      country: ''
+    }
+  });
   const [newLogo,setNewLogo] = useState<File|null>(null);
   const [website,setWebsite] = useState("")
   const [description,setDescription] = useState("")
@@ -30,10 +62,11 @@ const Profile = () => {
 
 
   useEffect(()=>{
+    //@ts-ignore
     setOrg(forg)
   },[forg,setOrg])
 
-  const handleUpdates = async (e) => {
+  const handleUpdates = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     const _id= localStorage.getItem("_id")
 
@@ -97,7 +130,7 @@ const Profile = () => {
                 </h4>
                     <Input type="file" onChange={(e)=>{setNewLogo(e.target.files ? e.target.files[0] : null )}} className="mt-2"/>
                   </div>
-                {/* <div>
+                <div>
                 <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                   Name
                 </h4>
@@ -112,7 +145,7 @@ const Profile = () => {
                       <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                         Phone Number
                       </h4>
-                      <Input type="text" value={org.phone} onChange={(e) => setOrg({ ...org, "Phone": e.target.value })} className="mt-2"/>
+                      <Input type="text" value={org.phone} onChange={(e) => setOrg({ ...org, "phone": e.target.value })} className="mt-2"/>
                   </div>
                   <div className="mt-6">
                       <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
@@ -121,7 +154,7 @@ const Profile = () => {
                       <Input type="text" value={org.location?.name} onChange={(e) => setOrg({ ...org, "location": { ...org.location , "name" :  e.target.value } })} className="mt-2"/>
                       <Input type="text" value={org.location?.state} onChange={(e) => setOrg({ ...org, "location": { ...org.location , "state" :  e.target.value } })} className="mt-2"/>
                       <Input type="text" value={org.location?.country} onChange={(e) => setOrg({ ...org, "location": { ...org.location , "country" :  e.target.value } })} className="mt-2"/>
-                  </div> */}
+                  </div>
                   <div className="mt-6">
                         <h4 className="scroll-m-20 text-sm font-medium tracking-tight">
                           Description
@@ -147,9 +180,9 @@ const Profile = () => {
                       <Input type="text" value={org.otherLinks} onChange={(e) => { setOrg({ ...org, "otherLinks": e.target.value }); setOtherLinks(e.target.value); }} className="mt-2"/>
                   </div>
                 <div className="px-8 mt-6">
-                  <Button onClick={handleUpdates}>
-                    Save Changes
-                  </Button>
+                <Button onClick={handleUpdates}>
+                  Update
+                </Button>
                 </div>
                 </SheetDescription>
               </SheetHeader>

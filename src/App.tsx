@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Link } from 'react-router-dom';
+import {useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from "./components/elements/SideBar";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";

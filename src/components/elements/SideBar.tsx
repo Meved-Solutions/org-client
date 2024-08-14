@@ -1,4 +1,4 @@
-import { IoHomeOutline, IoPersonOutline, IoAppsOutline, IoMailOutline, IoLogOutOutline } from 'react-icons/io5';
+import { IoPersonOutline, IoAppsOutline, IoLogOutOutline } from 'react-icons/io5';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';

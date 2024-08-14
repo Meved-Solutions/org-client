@@ -1,7 +1,7 @@
 import { Authenticated, Org  } from "@/atom";
 import axios from "axios"
 import { useEffect, useRef } from "react"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 
 const DataLoader = () => {
   const dataLoaded = useRef(false);

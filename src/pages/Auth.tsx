@@ -2,7 +2,7 @@ import { Authenticated, Org } from "@/atom";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
